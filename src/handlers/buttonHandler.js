@@ -413,13 +413,14 @@ async function handleConfirmPurchase(client, interaction, stockId) {
           .setDescription("You have requested to redeem Ascend Credits")
           .setColor(0x5865F2)
           .addFields(
-            { name: "Game", value: stock.game },
-            { name: "Package", value: stock.denomination },
-            { name: "Cost", value: `${stock.ac_cost} AC` },
-            { name: "Ticket", value: ticketId },
-            { name: "Current Balance", value: `${dbUser.balance} AC` },
-            { name: "Open Ticket", value: ticketLink }
-          )
+              { name: "Game", value: stock.game, inline: true },
+              { name: "Package", value: stock.denomination, inline: true },
+              { name: "Cost", value: `${stock.ac_cost} AC`, inline: true },
+            
+              { name: "Ticket", value: ticketId, inline: true },
+              { name: "Current Balance", value: `${dbUser.balance} AC`, inline: true },
+              { name: "Open Ticket", value: ticketLink, inline: true }
+            )
       ]
     });
 
@@ -515,12 +516,13 @@ if (purchasesChannel) {
         .setDescription("Thank you for redeeming Ascend Credits!")
         .setColor(0x57F287)
         .addFields(
-          { name: "Game", value: ticket.game },
-          { name: "Package", value: ticket.denomination },
-          { name: "Cost", value: `${ticket.ac_cost} AC` },
-          { name: "Ticket", value: ticketId },
-          { name: "Current Balance", value: `${dbUser.balance} AC` },
-          { name: "Get Your Code", value: `${ticketLink}` }
+          { name: "Game", value: ticket.game, inline: true },
+          { name: "Package", value: ticket.denomination, inline: true },
+          { name: "Cost", value: `${ticket.ac_cost} AC`, inline: true },
+        
+          { name: "Ticket", value: ticketId, inline: true },
+          { name: "Current Balance", value: `${dbUser.balance} AC`, inline: true },
+          { name: "Get Your Code", value: `${ticketLink}`, inline: true }
         )
     ]
   });
@@ -565,11 +567,12 @@ async function handleTicketCancel(client, interaction, ticketId) {
           .setDescription("Your redemption request has been cancelled and your Ascend Credits have been refunded!")
           .setColor(0xED4245)
           .addFields(
-            { name: "Game", value: ticket.game },
-            { name: "Package", value: ticket.denomination },
-            { name: "Credits Refunded", value: `${ticket.ac_cost} AC` },
-            { name: "Ticket", value: ticketId },
-            { name: "Current Balance", value: `${dbUser.balance} AC` }
+            { name: "Game", value: ticket.game, inline: true },
+            { name: "Package", value: ticket.denomination, inline: true },
+            { name: "Credits Refunded", value: `${ticket.ac_cost} AC`, inline: true },
+          
+            { name: "Ticket", value: ticketId, inline: true },
+            { name: "Current Balance", value: `${dbUser.balance} AC`, inline: true }
           )
       ]
     });
@@ -847,10 +850,10 @@ await interaction.editReply({
             .setDescription("Your redemption request has been reopened.")
             .setColor(0x5865F2)
             .addFields(
-              { name: "Game", value: ticket.game },
-              { name: "Package", value: ticket.denomination },
-              { name: "Cost", value: `${ticket.ac_cost} AC` },
-              { name: "Ticket", value: `${threadLink}` }
+              { name: "Game", value: ticket.game, inline: true },
+              { name: "Package", value: ticket.denomination, inline: true },
+              { name: "Cost", value: `${ticket.ac_cost} AC`, inline: true },
+              { name: "Ticket", value: `${threadLink}`, inline: true }
             )
             .setFooter({ text: "Ascend Rewards" })
             .setTimestamp()
