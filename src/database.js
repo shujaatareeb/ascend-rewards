@@ -2,11 +2,18 @@ import pg from "pg";
 import { config } from "dotenv";
 import fs from "fs";
 import path from "path";
+import dns from "node:dns";
 
 config();
 
+// force Node to prefer IPv4 (Railway cannot connect via IPv6)
+dns.setDefaultResultOrder("ipv4first");
+
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 const AC_RATE = 10;
