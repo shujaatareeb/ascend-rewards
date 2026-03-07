@@ -9,9 +9,10 @@ export default {
     .addUserOption(option =>
       option
         .setName("user")
-        .setDescription("User to check balance for")
+        .setDescription("User to check balance for (Admin only)")
         .setRequired(false)
-    ),
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   async execute(interaction) {
 
@@ -19,12 +20,13 @@ export default {
 
     const targetUser = interaction.options.getUser("user") || interaction.user;
 
+    // If checking someone else's balance → must be admin
     if (
       targetUser.id !== interaction.user.id &&
       !interaction.member.permissions.has(PermissionFlagsBits.Administrator)
     ) {
       return interaction.editReply({
-        content: "❌ Only admins can check other users' balances."
+        content: "❌ You do not have permission to check other users' balances."
       });
     }
 
