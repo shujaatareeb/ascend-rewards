@@ -5,7 +5,6 @@ import pg from "pg";
 import { config } from "dotenv";
 import fs from "fs";
 import path from "path";
-import dns from "node:dns";
 
 config();
 
