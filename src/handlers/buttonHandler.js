@@ -410,6 +410,7 @@ async function handleConfirmPurchase(client, interaction, stockId) {
       embeds: [
         new EmbedBuilder()
           .setTitle("Redemption Requested")
+          .setDescription("You have requested to redeem Ascend Credits")
           .setColor(0x5865F2)
           .addFields(
             { name: "Game", value: stock.game },
@@ -511,6 +512,7 @@ if (purchasesChannel) {
     embeds: [
       new EmbedBuilder()
         .setTitle("✅ Code Delivered")
+        .setDescription("Thank you for redeeming Ascend Credits!")
         .setColor(0x57F287)
         .addFields(
           { name: "Game", value: ticket.game },
@@ -560,6 +562,7 @@ async function handleTicketCancel(client, interaction, ticketId) {
       embeds: [
         new EmbedBuilder()
           .setTitle("❌ Redemption Cancelled")
+          .setDescription("Your redemption request has been cancelled and your Ascend Credits have been refunded!")
           .setColor(0xED4245)
           .addFields(
             { name: "Game", value: ticket.game },
@@ -841,6 +844,7 @@ await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Ticket Reopened")
+            .setDescription("Your redemption request has been reopened.")
             .setColor(0x5865F2)
             .addFields(
               { name: "Game", value: ticket.game },
