@@ -389,4 +389,59 @@ export async function logCredit(
 
 }
 
+/* ─────────────────────────────────────────────
+   Chat Reward Config
+───────────────────────────────────────────── */
+
+export async function setChatRewardConfig(messages, duration, credits, adminId) {
+  await query(
+    `INSERT INTO chat_reward_config (id, messages, duration, credits, set_by, updated_at)
+     VALUES (1, $1, $2, $3, $4, NOW())
+     ON CONFLICT (id) DO UPDATE
+       SET messages=$1, duration=$2, credits=$3, set_by=$4, updated_at=NOW()`,
+    [messages, duration, credits, adminId]
+  );
+}
+
+export async function getChatRewardConfig() {
+  const res = await query(`SELECT * FROM chat_reward_config WHERE id=1`);
+  return res.rows[0] ?? null;
+}
+
+/* ─────────────────────────────────────────────
+   Chat Tracking
+───────────────────────────────────────────── */
+
+export async function trackMessage(userId) {
+  // Upsert: if new user or window expired → reset; else increment
+  const res = await query(
+    `INSERT INTO chat_tracking (user_id, message_count, window_start)
+     VALUES ($1, 1, NOW())
+     ON CONFLICT (user_id) DO UPDATE
+       SET
+         message_count = CASE
+           WHEN NOW() - chat_tracking.window_start > (
+             SELECT (duration || ' seconds')::INTERVAL FROM chat_reward_config WHERE id=1
+           ) THEN 1
+           ELSE chat_tracking.message_count + 1
+         END,
+         window_start = CASE
+           WHEN NOW() - chat_tracking.window_start > (
+             SELECT (duration || ' seconds')::INTERVAL FROM chat_reward_config WHERE id=1
+           ) THEN NOW()
+           ELSE chat_tracking.window_start
+         END
+     RETURNING message_count`,
+    [userId]
+  );
+  return res.rows[0]?.message_count ?? 1;
+}
+
+export async function resetChatTracking(userId) {
+  await query(
+    `UPDATE chat_tracking SET message_count=0, window_start=NOW() WHERE user_id=$1`,
+    [userId]
+  );
+}
+
 export { pool };
