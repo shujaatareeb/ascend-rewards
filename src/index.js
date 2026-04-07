@@ -54,6 +54,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
@@ -133,7 +134,39 @@ client.on("error", (err) =>
 process.on("unhandledRejection", (err) =>
   console.error("[process] Unhandled rejection:", err)
 );
+import {
+  getChatRewardConfig,
+  trackMessage,
+  resetChatTracking,
+  addCredits,
+  logCredit,
+} from "./database.js";
 
+// Add this after interactionCreate:
+client.on("messageCreate", async (message) => {
+  if (message.author.bot) return;
+  if (!message.guild) return;   // ignore DMs
+
+  const config = await getChatRewardConfig();
+  if (!config) return;          // no reward set yet
+
+  const count = await trackMessage(message.author.id);
+
+  if (count >= config.messages) {
+    // Threshold hit — award immediately and reset
+    await resetChatTracking(message.author.id);
+    const updated = await addCredits(message.author.id, config.credits);
+    await logCredit(message.author.id, config.credits, "add", "Chat engagement reward", "system");
+
+    try {
+      await message.author.send(
+        `🎉 You earned **${config.credits} AC** for being active in chat! New balance: **${updated.balance} AC**`
+      );
+    } catch {
+      // User has DMs off — silently skip
+    }
+  }
+});
 
 // ─────────────────────────────────────────────
 // Login
