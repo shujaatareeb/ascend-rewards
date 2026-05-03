@@ -76,7 +76,8 @@
         { "amount": "2575 VP", "original_price": 2176, "discounted_price": 2045.44 },
         { "amount": "3650 VP", "original_price": 3047, "discounted_price": 2864.18 },
         { "amount": "5350 VP", "original_price": 4352, "discounted_price": 4090.88 },
-        { "amount": "8700 VP", "original_price": 6960, "discounted_price": 6542.4 }
+        { "amount": "8700 VP", "original_price": 6960, "discounted_price": 6542.4 },
+        { "amount": "11000 VP", "original_price": 8700, "discounted_price": 8134.50 }
       ]
     }
   ]
